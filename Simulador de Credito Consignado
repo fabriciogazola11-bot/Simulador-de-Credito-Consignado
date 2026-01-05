@@ -2,30 +2,167 @@ import java.util.Scanner;
 
 public class Main {
 
-    // CÓDIGOS ANSI PARA CORES
-    static final String RED = "\u001B[31m";
-    static final String YELLOW = "\u001B[33m";
-    static final String GREEN = "\u001B[32m";
-    static final String CYAN = "\u001B[36m";
-    static final String RESET = "\u001B[0m";
+    // ================= CORES ANSI =================
+    static class CoresANSI {
+        static final String RED = "\u001B[31m";
+        static final String YELLOW = "\u001B[33m";
+        static final String GREEN = "\u001B[32m";
+        static final String CYAN = "\u001B[36m";
+        static final String RESET = "\u001B[0m";
+    }
 
-    // ESTRUTURA BANCO (equivalente ao struct do C++)
+    // ================= BANCO =================
     static class Banco {
-        String nome;
-        float coeficiente;
+        private String nome;
+        private float coeficiente;
 
         Banco(String nome, float coeficiente) {
             this.nome = nome;
             this.coeficiente = coeficiente;
         }
+
+        String getNome() {
+            return nome;
+        }
+
+        float getCoeficiente() {
+            return coeficiente;
+        }
     }
 
+    // ================= PORCENTAGEM =================
+    static class Porcentagem {
+
+        // Percentual em %
+        static float aplicar(float valorBase, float percentual) {
+            return valorBase * (percentual / 100);
+        }
+
+        // Percentual fixo (ex: 5% = 0.05)
+        static float aplicarFixo(float valorBase, float percentual) {
+            return valorBase * percentual;
+        }
+    }
+
+    // ================= VALOR TOTAL =================
+    static class ValorTotal {
+        private static final int PARCELAS = 96;
+
+        static float somar(float... valores) {
+            float total = 0;
+            for (float v : valores) {
+                total += v;
+            }
+            return total;
+        }
+
+        static float parcela(float total) {
+            return total / PARCELAS;
+        }
+
+        static int getParcelas() {
+            return PARCELAS;
+        }
+    }
+
+    // ================= SIMULACAO =================
+    static class Simulacao {
+
+        static float calcularConsignado(float salario, float margem, float coef) {
+            float valorMargem = Porcentagem.aplicar(salario, margem);
+            return valorMargem / coef;
+        }
+
+        static float calcularCartao(float salario, float coef) {
+            float valorCartao = Porcentagem.aplicarFixo(salario, 0.05f);
+            return valorCartao / coef;
+        }
+    }
+
+    // ================= MENU =================
+    static class MenuSimulacao {
+
+        static void executar(Scanner scanner, float salario, float margem, Banco[] bancos) {
+
+            char opcao;
+
+            do {
+                System.out.println("\n=================== " + CoresANSI.YELLOW + "MENU DE SIMULACAO" + CoresANSI.RESET + " ===================");
+                System.out.println(CoresANSI.RED + "1" + CoresANSI.RESET + " - EMPRESTIMO + CARTAO");
+                System.out.println(CoresANSI.RED + "2" + CoresANSI.RESET + " - APENAS EMPRESTIMO");
+                System.out.println(CoresANSI.RED + "3" + CoresANSI.RESET + " - APENAS CARTAO");
+                System.out.println(CoresANSI.RED + "4" + CoresANSI.RESET + " - VALOR MENOR DO EMPRESTIMO");
+                System.out.println(CoresANSI.RED + "5" + CoresANSI.RESET + " - ENCERRAR");
+                System.out.print("OPCAO: ");
+                opcao = scanner.next().charAt(0);
+
+                float valorMenor = 0;
+                if (opcao == '4') {
+                    System.out.print("VALOR MENOR DESEJADO: R$ ");
+                    valorMenor = scanner.nextFloat();
+                }
+
+                if (opcao >= '1' && opcao <= '4') {
+
+                    for (Banco banco : bancos) {
+
+                        float coef = banco.getCoeficiente();
+
+                        float consignado = Simulacao.calcularConsignado(salario, margem, coef);
+                        float cartao = Simulacao.calcularCartao(salario, coef);
+
+                        if (opcao == '4') {
+                            consignado = valorMenor;
+                        }
+
+                        float total = ValorTotal.somar(consignado, cartao);
+                        float parcelaConsig = ValorTotal.parcela(consignado);
+                        float parcelaCartao = ValorTotal.parcela(cartao);
+                        float parcelaTotal = ValorTotal.parcela(total);
+
+                        System.out.println("\n----- BANCO: " + CoresANSI.CYAN + banco.getNome() + CoresANSI.RESET + " -----");
+
+                        switch (opcao) {
+                            case '1':
+                                System.out.printf("CONSIGNADO: R$ %.2f%n", consignado);
+                                System.out.printf("CARTAO (5%%): R$ %.2f%n", cartao);
+                                System.out.printf("PARCELA TOTAL (%dx): R$ %.2f%n",
+                                        ValorTotal.getParcelas(), parcelaTotal);
+                                System.out.printf("TOTAL: R$ %.2f%n", total);
+                                break;
+
+                            case '2':
+                                System.out.printf("CONSIGNADO: R$ %.2f%n", consignado);
+                                System.out.printf("PARCELA (%dx): R$ %.2f%n",
+                                        ValorTotal.getParcelas(), parcelaConsig);
+                                break;
+
+                            case '3':
+                                System.out.printf("CARTAO (5%%): R$ %.2f%n", cartao);
+                                System.out.printf("PARCELA (%dx): R$ %.2f%n",
+                                        ValorTotal.getParcelas(), parcelaCartao);
+                                break;
+
+                            case '4':
+                                System.out.printf("CONSIGNADO (MENOR): R$ %.2f%n", consignado);
+                                System.out.printf("CARTAO (5%%): R$ %.2f%n", cartao);
+                                System.out.printf("PARCELA TOTAL (%dx): R$ %.2f%n",
+                                        ValorTotal.getParcelas(), parcelaTotal);
+                                System.out.printf("TOTAL: R$ %.2f%n", total);
+                                break;
+                        }
+                        System.out.println("-----------------------------------------------------");
+                    }
+                }
+
+            } while (opcao != '5');
+        }
+    }
+
+    // ================= MAIN =================
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-
-        float salario, margem;
-        final int PARCELAS = 96;
         char continuar;
 
         Banco[] bancos = {
@@ -35,102 +172,25 @@ public class Main {
                 new Banco("C6", 0.025f),
                 new Banco("QUALY", 0.027f),
                 new Banco("AGIL", 0.0241f),
-                new Banco("BANCO NBC (SEM SEGURO)", 0.0241f),
+                new Banco("BANCO NBC", 0.0241f),
                 new Banco("BANCO PRESENCA", 0.028f)
         };
 
         do {
-            System.out.print("DIGITE O " + GREEN + "SALARIO" + RESET + " DO APOSENTADO: R$ ");
-            salario = scanner.nextFloat();
+            System.out.print("SALARIO: R$ ");
+            float salario = scanner.nextFloat();
 
-            System.out.print("DIGITE A " + YELLOW + "MARGEM PRINCIPAL" + RESET + " (%): ");
-            margem = scanner.nextFloat();
+            System.out.print("MARGEM (%): ");
+            float margem = scanner.nextFloat();
 
-            char opcao;
-            do {
-                System.out.println("\n=================== " + YELLOW + "MENU DE SIMULACAO" + RESET + " ===================");
-                System.out.println(RED + "1" + RESET + " - " + YELLOW + "EMPRESTIMO + CARTAO" + RESET);
-                System.out.println(RED + "2" + RESET + " - " + YELLOW + "APENAS EMPRESTIMO" + RESET);
-                System.out.println(RED + "3" + RESET + " - " + YELLOW + "APENAS CARTAO" + RESET);
-                System.out.println(RED + "4" + RESET + " - " + YELLOW + "VALOR MENOR DO EMPRESTIMO" + RESET);
-                System.out.println(RED + "5" + RESET + " - " + YELLOW + "ENCERRAR SIMULACAO" + RESET);
-                System.out.print("DIGITE A OPCAO (1-5): ");
-                opcao = scanner.next().charAt(0);
+            MenuSimulacao.executar(scanner, salario, margem, bancos);
 
-                if (opcao >= '1' && opcao <= '4') {
-
-                    float valorMenor = 0;
-                    if (opcao == '4') {
-                        System.out.print("DIGITE O VALOR DESEJADO MENOR QUE O LIBERADO: R$ ");
-                        valorMenor = scanner.nextFloat();
-                    }
-
-                    for (Banco banco : bancos) {
-
-                        float coef = banco.coeficiente;
-
-                        float valorConsignado = (salario * (margem / 100)) / coef;
-                        float parcelaConsignado = valorConsignado / PARCELAS;
-
-                        float valorCartao = (salario * 0.05f) / coef;
-                        float parcelaCartao = valorCartao / PARCELAS;
-
-                        if (opcao == '4') {
-                            valorConsignado = valorMenor;
-                            parcelaConsignado = valorConsignado / PARCELAS;
-                        }
-
-                        float totalComCartao = valorConsignado + valorCartao;
-                        float parcelaTotal = parcelaConsignado + parcelaCartao;
-
-                        System.out.println("\n----- BANCO: " + CYAN + banco.nome + RESET + " -----");
-                        System.out.printf("COEFICIENTE: %.5f%n", coef);
-
-                        switch (opcao) {
-                            case '1':
-                                System.out.printf(YELLOW + "VALOR DO CONSIGNADO: " + GREEN + "R$ %.2f%n" + RESET, valorConsignado);
-                                System.out.printf(YELLOW + "VALOR DO CARTAO (5%%): " + GREEN + "R$ %.2f%n" + RESET, valorCartao);
-                                System.out.printf(YELLOW + "VALOR DA PARCELA TOTAL (%dx): " + GREEN + "R$ %.2f%n" + RESET, PARCELAS, parcelaTotal);
-                                System.out.printf(YELLOW + "TOTAL EMPRESTIMO + CARTAO: " + GREEN + "R$ %.2f%n" + RESET, totalComCartao);
-                                break;
-
-                            case '2':
-                                System.out.printf(YELLOW + "VALOR DO CONSIGNADO: " + GREEN + "R$ %.2f%n" + RESET, valorConsignado);
-                                System.out.printf(YELLOW + "VALOR DA PARCELA (%dx): " + GREEN + "R$ %.2f%n" + RESET, PARCELAS, parcelaConsignado);
-                                System.out.printf(YELLOW + "TOTAL EMPRESTIMO: " + GREEN + "R$ %.2f%n" + RESET, valorConsignado);
-                                break;
-
-                            case '3':
-                                System.out.printf(YELLOW + "VALOR DO CARTAO (5%%): " + GREEN + "R$ %.2f%n" + RESET, valorCartao);
-                                System.out.printf(YELLOW + "VALOR DA PARCELA (%dx): " + GREEN + "R$ %.2f%n" + RESET, PARCELAS, parcelaCartao);
-                                System.out.printf(YELLOW + "TOTAL CARTAO: " + GREEN + "R$ %.2f%n" + RESET, valorCartao);
-                                break;
-
-                            case '4':
-                                System.out.printf(YELLOW + "VALOR DO CONSIGNADO (MENOR): " + GREEN + "R$ %.2f%n" + RESET, valorConsignado);
-                                System.out.printf(YELLOW + "VALOR DO CARTAO (5%%): " + GREEN + "R$ %.2f%n" + RESET, valorCartao);
-                                System.out.printf(YELLOW + "VALOR DA PARCELA TOTAL (%dx): " + GREEN + "R$ %.2f%n" + RESET, PARCELAS, parcelaTotal);
-                                System.out.printf(YELLOW + "TOTAL EMPRESTIMO + CARTAO: " + GREEN + "R$ %.2f%n" + RESET, totalComCartao);
-                                break;
-                        }
-                        System.out.println("-----------------------------------------------------------------");
-                    }
-
-                } else if (opcao == '5') {
-                    System.out.println("\n" + RED + "ENCERRANDO SIMULACAO DESTA RODADA." + RESET);
-                    break;
-                } else {
-                    System.out.println(RED + "\nOPCAO INVALIDA! TENTE NOVAMENTE." + RESET);
-                }
-
-            } while (opcao != '5');
-
-            System.out.print("\nDESEJA REALIZAR OUTRA SIMULACAO COM OUTRO SALARIO? (S/N): ");
+            System.out.print("\nDESEJA NOVA SIMULACAO? (S/N): ");
             continuar = scanner.next().charAt(0);
 
         } while (continuar == 'S' || continuar == 's');
 
-        System.out.println("\n" + RED + "PROGRAMA ENCERRADO." + RESET);
         scanner.close();
+        System.out.println(CoresANSI.RED + "\nPROGRAMA ENCERRADO." + CoresANSI.RESET);
     }
 }
