@@ -82,3 +82,19 @@ Finaliza o programa.
 
 ```java
 valorMargem = salario * (margem / 100)
+
+
+Main
+│
+├── CoresANSI
+├── Banco
+├── Porcentagem
+├── ValorTotal
+├── Simulacao
+├── MenuSimulacao
+└── Main
+
+
+
+
+
