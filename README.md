@@ -94,7 +94,46 @@ Main
 ├── MenuSimulacao
 └── Main
 
+| Classe        | Função                            |
+| ------------- | --------------------------------- |
+| CoresANSI     | Define cores do terminal          |
+| Banco         | Armazena nome e coeficiente       |
+| Porcentagem   | Realiza cálculos percentuais      |
+| ValorTotal    | Soma valores e calcula parcelas   |
+| Simulacao     | Realiza cálculos financeiros      |
+| MenuSimulacao | Exibe o menu e controla as opções |
+| Main          | Inicializa e executa o programa   |
 
+
+SALARIO: R$ 3000
+
+MARGEM (%): 35
+
+=================== MENU DE SIMULACAO ===================
+
+1 - EMPRESTIMO + CARTAO
+2 - APENAS EMPRESTIMO
+3 - APENAS CARTAO
+4 - VALOR MENOR DO EMPRESTIMO
+5 - ENCERRAR
+
+OPCAO: 1
+
+
+Conceitos Aplicados
+Programação Orientada a Objetos (POO)
+Encapsulamento
+Classes e Objetos
+Vetores de Objetos
+Métodos Estáticos
+Estruturas de Repetição
+Estruturas de Decisão
+Entrada e Saída de Dados
+
+
+Autor
+
+Projeto desenvolvido por Fabrício para estudos e prática de desenvolvimento em Java.
 
 
 
