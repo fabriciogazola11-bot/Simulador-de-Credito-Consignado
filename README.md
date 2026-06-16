@@ -35,6 +35,26 @@ O sistema permite informar o salário e a margem consignável do cliente, calcul
 Cada banco possui um coeficiente próprio utilizado para o cálculo da liberação de crédito.
 
 ---
+## Conceitos Aplicados
+
+Programação Orientada a Objetos (POO)
+Encapsulamento
+Classes e Objetos
+Vetores de Objetos
+Métodos Estáticos
+Estruturas de Repetição
+Estruturas de Decisão
+Entrada e Saída de Dados
+
+## MENU SIMULAÇÃO
+1 - EMPRESTIMO + CARTAO
+2 - APENAS EMPRESTIMO
+3 - APENAS CARTAO
+4 - VALOR MENOR DO EMPRESTIMO
+5 - ENCERRAR
+
+OPCAO: 1
+
 
 ## 📋 Menu de Opções
 
@@ -75,6 +95,9 @@ Permite informar um valor mínimo desejado para o empréstimo e calcular:
 Finaliza o programa.
 
 ---
+## Autor
+
+Projeto desenvolvido por Fabrício para estudos e prática de desenvolvimento em Java.
 
 ## ⚙️ Fórmulas Utilizadas
 
@@ -109,31 +132,11 @@ SALARIO: R$ 3000
 
 MARGEM (%): 35
 
-=================== MENU DE SIMULACAO ===================
-
-1 - EMPRESTIMO + CARTAO
-2 - APENAS EMPRESTIMO
-3 - APENAS CARTAO
-4 - VALOR MENOR DO EMPRESTIMO
-5 - ENCERRAR
-
-OPCAO: 1
 
 
-Conceitos Aplicados
-Programação Orientada a Objetos (POO)
-Encapsulamento
-Classes e Objetos
-Vetores de Objetos
-Métodos Estáticos
-Estruturas de Repetição
-Estruturas de Decisão
-Entrada e Saída de Dados
 
 
-Autor
 
-Projeto desenvolvido por Fabrício para estudos e prática de desenvolvimento em Java.
 
 
 
